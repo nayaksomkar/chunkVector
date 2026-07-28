@@ -231,9 +231,3 @@ ruff check chunkvector/
 # Type-check (install basedpyright or pyright)
 basedpyright chunkvector/
 ```
-
----
-
-## License
-
-MIT
