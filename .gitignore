@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[oc]
+*.pyc
+build/
+dist/
+wheels/
+*.egg-info
+*.egg
+.ruff_cache/
+.pytest_cache/
+
+# Virtual environments
+.venv
+.venv/
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ChunkVector specific
+chroma_db/
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+.omo
