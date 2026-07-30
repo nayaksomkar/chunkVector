@@ -14,11 +14,14 @@ logger = logging.getLogger(__name__)
 
 
 class ChromaStore:
-    """Thin wrapper around a persistent ChromaDB collection."""
+    """Thin wrapper around a persistent or remote ChromaDB collection."""
 
     def __init__(self, collection_name: str = "documents", persist_directory: str | None = None):
         persist_directory = persist_directory or settings.chroma_persist_directory
-        self.client = chromadb.PersistentClient(path=persist_directory)
+        if settings.chroma_host:
+            self.client = chromadb.HttpClient(host=settings.chroma_host, port=settings.chroma_port or 8000)
+        else:
+            self.client = chromadb.PersistentClient(path=persist_directory)
         self.collection_name = collection_name
         self._collection = self._get_or_create_collection()
 

@@ -15,7 +15,7 @@
 - **Vector search** — Cosine similarity via ChromaDB with ranked results + metadata
 - **Collection management** — List / delete vector collections via REST
 - **Instrumented pipeline** — Per-stage timing logged (extraction, chunking, embedding, insertion)
-- **Dockerised** — Ready-to-deploy container
+- **Dockerised** — Docker Compose setup with ChromaDB included
 
 ---
 
@@ -30,7 +30,7 @@
 
 ```bash
 # 1. Clone and enter the repo
-git clone https://github.com/<you>/chunkvector && cd chunkvector
+git clone https://github.com/nayaksomkar/chunkVector && cd chunkvector
 
 # 2. (Optional) Create a virtual environment
 python -m venv .venv && source .venv/bin/activate
@@ -44,6 +44,15 @@ uvicorn chunkvector.app.main:app --host 0.0.0.0 --port 8000
 
 The API is now live at `http://localhost:8000`.  
 OpenAPI docs: `http://localhost:8000/docs`
+
+### Docker Compose (recommended)
+
+```bash
+docker compose up --build
+```
+
+This starts both the ChunkVector API and a dedicated ChromaDB instance.
+The API is available at `http://localhost:8000` and ChromaDB at `http://localhost:8001`.
 
 ### Docker
 
@@ -159,6 +168,8 @@ All settings can be overridden via environment variables or a `.env` file.
 | `CHUNK_OVERLAP` | `200` | Overlap between consecutive chunks |
 | `EMBEDDING_MODEL` | `sentence-transformers/all-MiniLM-L6-v2` | HuggingFace embedding model name |
 | `CHROMA_PERSIST_DIR` | `./chroma_db` | Directory for ChromaDB persistence |
+| `CHROMA_HOST` | _(none)_ | ChromaDB server host (enables HTTP mode when set) |
+| `CHROMA_PORT` | `8000` | ChromaDB server port |
 | `HOST` | `0.0.0.0` | Server bind address |
 | `PORT` | `8000` | Server port |
 
@@ -170,6 +181,8 @@ CHUNK_OVERLAP=50
 EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
 CHROMA_PERSIST_DIR=/data/chroma
 ```
+
+When using Docker Compose, `CHROMA_HOST=chromadb` and `CHROMA_PORT=8000` are set automatically.
 
 ---
 
@@ -212,6 +225,8 @@ chunkvector/
 │           ├── __init__.py
 │           └── store.py             # ChromaDB wrapper
 ├── Dockerfile
+├── docker-compose.yml
+├── .dockerignore
 ├── pyproject.toml
 ├── requirements.txt
 └── README.md
